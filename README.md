@@ -2,7 +2,7 @@
 
 A simple library to get the URL of the given **YouTube Video ID** to use it natively with Ti.Media.VideoPlayer
 
-It returns an URL object with the following attributes:
+It returns an URL object with the following properties:
 
 ```javascript
 {
