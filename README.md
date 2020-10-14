@@ -1,6 +1,6 @@
 ## ti.youtube
 
-A simple library to get the URL of a given **YouTube Video ID** and use it natively with Ti.Media.VideoPlayer
+A simple library to get the URL of the given **YouTube Video ID** to use it natively with Ti.Media.VideoPlayer
 
 It returns an URL object with the following attributes:
 
