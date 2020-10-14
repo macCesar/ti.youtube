@@ -6,9 +6,9 @@ It returns an URL object with the following attributes:
 
 ```javascript
 {
-	medium: 'typically 360p',
-	high: 'typically 720p',
-	best: 'best quality available either medium or high'
+    medium: 'typically 360p',
+    high: 'typically 720p',
+    best: 'best quality available either medium or high'
 }
 ```
 
@@ -18,51 +18,51 @@ It returns an URL object with the following attributes:
 const tiYoutube = require('ti.youtube');
 
 (function constructor() {
-	'use strict';
+    'use strict';
 
-	tiYoutube.getUrlByVideoId('SMKPKGW083c', url => {
-		// Available Video Qualities:
-		// medium ( typically 360p )
-		// high ( typically 720p )
-		// best ( best quality available either medium or high )
-		$.videoPlayer.url = url.best;
-	});
+    tiYoutube.getUrlByVideoId('SMKPKGW083c', url => {
+        // Available Video Qualities:
+        // medium ( typically 360p )
+        // high ( typically 720p )
+        // best ( best quality available either medium or high )
+        $.videoPlayer.url = url.best;
+    });
 
-	$.window.open();
+    $.window.open();
 }());
 ```
 
 > index.xml
 ```xml
 <Alloy>
-	<Window id="window">
-		<VideoPlayer id="videoPlayer" ns="Ti.Media" />
-	</Window>
+    <Window id="window">
+        <VideoPlayer id="videoPlayer" ns="Ti.Media" />
+    </Window>
 </Alloy>
 ```
 
 > app.tss
 ```css
 'Window': {
-	backgroundColor: '#fff'
+    backgroundColor: '#fff'
 }
 
 'VideoPlayer' : {
-	autoplay: true,
-	width: Ti.UI.FILL,
-	height: Ti.UI.FILL,
-	showsControls: true
+    autoplay: true,
+    width: Ti.UI.FILL,
+    height: Ti.UI.FILL,
+    showsControls: true
 }
 
 'VideoPlayer[platform=ios]' : {
-	allowsAirPlay: true,
-	backgroundColor: 'transparent',
-	mediaTypes: [ Ti.Media.VIDEO_MEDIA_TYPE_VIDEO ]
+    allowsAirPlay: true,
+    backgroundColor: 'transparent',
+    mediaTypes: [ Ti.Media.VIDEO_MEDIA_TYPE_VIDEO ]
 }
 
 'VideoPlayer[platform=android]' : {
-	keepScreenOn: true,
-	backgroundColor: '#000'
+    keepScreenOn: true,
+    backgroundColor: '#000'
 }
 ```
 
