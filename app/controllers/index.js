@@ -1,9 +1,9 @@
-const streamingData = require('youtube-streaming-data');
+const tiYoutube = require('ti.youtube');
 
 (function constructor() {
 	'use strict';
 
-	streamingData.getUrlByVideoId('SMKPKGW083c', url => {
+	tiYoutube.getUrlByVideoId('SMKPKGW083c', url => {
 		// Available Video Qualities:
 		// medium ( typically 360p )
 		// high ( typically 720p )
