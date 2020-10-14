@@ -1,6 +1,6 @@
 ## ti.youtube
 
-A simple library to get the URL of a given **YouTube Video ID** and use it natively with [Ti.Media.VideoPlayer](https://appcelerator.github.io/titanium-docs/api/titanium/media/videoplayer.html#url)
+A simple library to get the URL of a given **YouTube Video ID** and use it natively with Ti.Media.VideoPlayer
 
 It returns an URL object with the following attributes:
 
