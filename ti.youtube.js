@@ -38,7 +38,7 @@ function getUrlByVideoId(videoID, callback) {
 
 	xhr.send();
 }
-exports.getUrlByVideoId = getUrlByVideoId;
+module.exports.getUrlByVideoId = getUrlByVideoId;
 
 function qsToJson(qs) {
 	let res = {};

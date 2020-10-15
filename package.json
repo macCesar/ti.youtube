@@ -1,0 +1,25 @@
+{
+	"name": "ti.youtube",
+	"version": "1.0.0",
+	"description": "A small library to get the URL of the desired YouTube video ID to use it natively in Ti.Media.VideoPlayer.",
+	"main": "ti.youtube.js",
+	"keywords": [
+		"alloy",
+		"youtube",
+		"titanium",
+		"titanium-module",
+		"Ti.Media.VideoPlayer"
+	],
+	"titaniumManifest": {
+		"guid": "7cb7fc50-1e39-4c63-a2d3-9a025f338f79"
+	},
+	"author": "César Estrada",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/macCesar/ti.youtube"
+	},
+	"bugs": {
+		"url": "https://github.com/macCesar/ti.youtube/issues"
+	},
+	"homepage": "https://github.com/macCesar"
+}

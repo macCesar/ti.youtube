@@ -1,5 +1,0 @@
-<Alloy>
-	<Window id="window">
-		<VideoPlayer id="videoPlayer" ns="Ti.Media" />
-	</Window>
-</Alloy>
