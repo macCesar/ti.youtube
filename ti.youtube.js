@@ -1,4 +1,4 @@
-function getUrlByVideoId(videoID, callback) {
+function getUrlByVideoId(videoID, callback, errorCallback) {
 	const xhr = Ti.Network.createHTTPClient({
 		onload: function () {
 			let player_response = qsToJson(this.responseText).player_response;
@@ -26,16 +26,28 @@ function getUrlByVideoId(videoID, callback) {
 
 					callback(urls);
 				} else {
-					alert('There are no valid URLs to play the video!');
+					if (errorCallback) {
+						errorCallback({error: "no_valid_urls"});
+					} else {
+						alert('There are no valid URLs to play the video!');
+					}
 				}
 			} else {
-				alert('This video cannot be played natively!');
+					if (errorCallback) {
+						errorCallback({error: "video_not_allowed"});
+					} else {
+						alert('This video cannot be played natively!');
+					}
 			}
 		},
 
 		onerror: function (e) {
 			Ti.API.info('error, HTTP status = ' + this.status);
-			alert(e.error);
+			if (errorCallback) {
+				errorCallback({error: "http_error", result: e});
+			} else {			
+				alert(e.error);
+			}
 		},
 
 		timeout: 5000
