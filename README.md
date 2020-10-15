@@ -33,6 +33,9 @@ tiYoutube.getUrlByVideoId('SMKPKGW083c', url => {
     // high ( typically 720p )
     // best ( best quality available either medium or high )
     $.videoPlayer.url = url.best;
+}, e => {
+  // optional callback in case of an error
+  // can return e.error statuses ["no_valid_urls", "video_not_allowed", "http_error"] 
 });
 $.window.open();
 ```
