@@ -1,6 +1,6 @@
 {
 	"name": "ti.youtube",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A small library to get the URL of the desired YouTube video ID to use it natively in Ti.Media.VideoPlayer.",
 	"main": "ti.youtube.js",
 	"keywords": [
