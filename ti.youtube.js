@@ -5,22 +5,29 @@ function getUrlByVideoId(videoID, callback) {
 
 			if (player_response.playabilityStatus.playableInEmbed) {
 				let urls = {};
-
 				let formats = player_response.streamingData.formats;
+				let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
 
-				// formats[0] typically contains 360p video ( medium quality )
-				if (formats[0]) {
-					urls.medium = formats[0].url;
+				if (hlsManifestUrl) {
+					urls.medium = urls.high = urls.best = hlsManifestUrl;
+					callback(urls);
+				} else if (formats) {
+					// formats[0] typically contains 360p video ( medium quality )
+					if (formats[0]) {
+						urls.medium = formats[0].url;
+					}
+
+					// formats[1] typically contains 720p video ( hd720 quality )
+					if (formats[1]) {
+						urls.high = formats[1].url;
+					}
+
+					urls.best = (urls.high) ? urls.high : urls.medium;
+
+					callback(urls);
+				} else {
+					alert('There are no valid URLs to play the video!');
 				}
-
-				// formats[1] typically contains 720p video ( hd720 quality )
-				if (formats[1]) {
-					urls.high = formats[1].url;
-				}
-
-				urls.best = (urls.high) ? urls.high : urls.medium;
-
-				callback(urls);
 			} else {
 				alert('This video cannot be played natively!');
 			}
