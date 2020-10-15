@@ -12,7 +12,17 @@ It returns an URL object with the following properties:
 }
 ```
 
-## Using the library
+## Two ways to install the library
+### Install from NPM
+Run the following command in your `lib` folder (or Resources for classic project).
+```terminal
+npm i ti.youtube
+```
+
+### Download the library
+If you don't use `NPM`, you can download the [latest version](https://github.com/macCesar/ti.youtube/blob/master/ti.youtube.js) and place it in your `lib` folder (or Resources for classic project).
+
+## Using it
 > index.js
 ```javascript
 const tiYoutube = require('ti.youtube');
