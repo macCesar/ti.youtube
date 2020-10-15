@@ -11,6 +11,8 @@ It returns an URL object with the following properties:
     best: 'best quality available either medium or high'
 }
 ```
+### Live Streaming Media
+When available, ti.youtube will use HLS manifest file to play adaptive media from live streaming.
 
 ## Two ways to install the library
 ### Install from NPM
