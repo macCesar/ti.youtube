@@ -27,25 +27,25 @@ function getUrlByVideoId(videoID, callback, errorCallback) {
 					callback(urls);
 				} else {
 					if (errorCallback) {
-						errorCallback({error: "no_valid_urls"});
+						errorCallback({ error: "no_valid_urls" });
 					} else {
 						alert('There are no valid URLs to play the video!');
 					}
 				}
 			} else {
-					if (errorCallback) {
-						errorCallback({error: "video_not_allowed"});
-					} else {
-						alert('This video cannot be played natively!');
-					}
+				if (errorCallback) {
+					errorCallback({ error: "video_not_allowed" });
+				} else {
+					alert('This video cannot be played natively!');
+				}
 			}
 		},
 
 		onerror: function (e) {
 			Ti.API.info('error, HTTP status = ' + this.status);
 			if (errorCallback) {
-				errorCallback({error: "http_error", result: e});
-			} else {			
+				errorCallback({ error: "http_error", result: e });
+			} else {
 				alert(e.error);
 			}
 		},
@@ -58,6 +58,15 @@ function getUrlByVideoId(videoID, callback, errorCallback) {
 	xhr.send();
 }
 module.exports.getUrlByVideoId = getUrlByVideoId;
+
+function getVideoIdFromUrl(urlStream) {
+	let regExp = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)(\/)?(watch\?v=|\?v=)?(.*)$/;
+
+	let match = urlStream.match(regExp);
+
+	return (match && match[6].length === 11) ? match[6] : false;
+}
+module.exports.getVideoIdFromUrl = getVideoIdFromUrl;
 
 function qsToJson(qs) {
 	let res = {};

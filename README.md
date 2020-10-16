@@ -14,6 +14,17 @@ It returns an URL object with the following properties:
 ### Live Streaming Media
 When available, ti.youtube will use HLS manifest file to play adaptive media from live streaming.
 
+## Warning and Restrictions
+### Legal notice
+`ti.youtube` may brake YouTube [Terms of Service](https://www.youtube.com/t/terms). The only *official* way of playing a YouTube video inside an app is with a `WebView` and the [iframe player API](https://developers.google.com/youtube/iframe_api_reference).
+
+It is up to you to give proper credit to YouTube, their services, and to the owner's video sources.
+
+### Restricted playback
+Some YouTube videos are restricted by their owners to play only on YouTube or embedded on websites.
+
+The library will show an alert that the given video cannot be played natively.
+
 ## Two ways to install the library
 ### Install from NPM
 Run the following command in your `lib` directory in Alloy, Resources directory for classic or the project root for Titanium Webpack projects.
@@ -29,16 +40,21 @@ If you don't use `npm`, you can download the [latest version](https://github.com
 ```javascript
 const tiYoutube = require('ti.youtube');
 
-tiYoutube.getUrlByVideoId('SMKPKGW083c', url => {
-    // Available Video Qualities:
-    // medium ( typically 360p )
-    // high ( typically 720p )
-    // best ( best quality available either medium or high )
-    $.videoPlayer.url = url.best;
-}, e => {
-  // optional callback in case of an error
-  // can return e.error statuses ["no_valid_urls", "video_not_allowed", "http_error"] 
-});
+let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/SMKPKGW083c');
+
+if (videoID) {
+    tiYoutube.getUrlByVideoId(videoID, url => {
+        // Available Video Qualities:
+        // medium ( typically 360p )
+        // high ( typically 720p )
+        // best ( best quality available either medium or high )
+        $.videoPlayer.url = url.best;
+    }, e => {
+        // optional callback in case of an error
+        // can return e.error statuses ["no_valid_urls", "video_not_allowed", "http_error"]
+    });
+}
+
 $.window.open();
 ```
 
@@ -76,10 +92,24 @@ $.window.open();
 }
 ```
 
-## Restrictions:
-Some YouTube videos are restricted by their owners to play only on websites.
+## Helper Functions
+### getVideoIdFromUrl()
+To get the video ID from any of the supported URL formats.
+```javascript
+    // Sample URLs
+    // 'youtu.be/SMKPKGW083c',
+    // 'https://youtu.be/SMKPKGW083c',
+    // 'https://youtube.com/SMKPKGW083c',
+    // 'youtube.com/watch?v=SMKPKGW083c',
+    // 'https://youtu.be/?v=SMKPKGW083c',
+    // 'https://youtu.be/watch?v=SMKPKGW083c',
+    // 'https://youtube.com/watch?v=SMKPKGW083c',
+    // 'https://www.youtu.be/watch?v=SMKPKGW083c',
+    // 'https://www.youtube.com/watch?v=SMKPKGW083c'
 
-The library will show an alert that the given video cannot be played natively.
+    getVideoIdFromUrl('https://youtu.be/SMKPKGW083c')
+```
+It returns the Video ID, or `false` if it cannot find any.
 
 ## ToDo
 I will try to export more information from the returned data. Like video title, description, length, thumbnails, etc.
