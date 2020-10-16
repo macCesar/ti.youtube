@@ -96,7 +96,7 @@ $.window.open();
 ### getVideoIdFromUrl()
 To get the video ID from any of the supported URL formats.
 ```javascript
-    // Sample URLs
+    // URL Formats
     // 'youtu.be/SMKPKGW083c',
     // 'https://youtu.be/SMKPKGW083c',
     // 'https://youtube.com/SMKPKGW083c',
