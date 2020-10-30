@@ -152,8 +152,8 @@ if (videoID) {
         Alloy.Globals.mocx.createCollection('videoDetails', [videoDetails]);
 
         // Or you can put it directly into elements:
-        $.videoTitle = videoDetails.title;
-        $.videoDescription = videoDetails.description;
+        $.videoTitle.text = videoDetails.title;
+        $.videoDescription.text = videoDetails.description;
     });
 }
 ```
