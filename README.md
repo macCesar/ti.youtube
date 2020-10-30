@@ -12,7 +12,7 @@ It returns an URL object with the following properties:
 }
 ```
 ### Live Streaming Media
-When available, ti.youtube will use HLS manifest file to play adaptive media from live streaming.
+When available, `ti.youtube` will use HLS manifest file to play adaptive media from live streaming URLs.
 
 ## Warning and Restrictions
 ### Legal notice
@@ -40,7 +40,7 @@ If you don't use `npm`, you can download the [latest version](https://github.com
 ```javascript
 const tiYoutube = require('ti.youtube');
 
-let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/SMKPKGW083c');
+let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
 
 if (videoID) {
     tiYoutube.getUrlByVideoId(videoID, url => {
@@ -94,25 +94,90 @@ $.window.open();
 
 ## Helper Functions
 ### getVideoIdFromUrl()
-To get the video ID from any of the supported URL formats.
+To get the `video ID` from any of the supported URL formats.
 ```javascript
-    // URL Formats
-    // 'youtu.be/SMKPKGW083c',
-    // 'https://youtu.be/SMKPKGW083c',
-    // 'https://youtube.com/SMKPKGW083c',
-    // 'youtube.com/watch?v=SMKPKGW083c',
-    // 'https://youtu.be/?v=SMKPKGW083c',
-    // 'https://youtu.be/watch?v=SMKPKGW083c',
-    // 'https://youtube.com/watch?v=SMKPKGW083c',
-    // 'https://www.youtu.be/watch?v=SMKPKGW083c',
-    // 'https://www.youtube.com/watch?v=SMKPKGW083c'
+const tiYoutube = require('ti.youtube');
 
-    getVideoIdFromUrl('https://youtu.be/SMKPKGW083c')
+tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
+// output: M5QY2_8704o
+
+// Supported URL Formats
+// 'youtu.be/M5QY2_8704o',
+// 'https://youtu.be/M5QY2_8704o',
+// 'https://youtube.com/M5QY2_8704o',
+// 'youtube.com/watch?v=M5QY2_8704o',
+// 'https://youtu.be/?v=M5QY2_8704o',
+// 'https://youtu.be/watch?v=M5QY2_8704o',
+// 'https://youtube.com/watch?v=M5QY2_8704o',
+// 'https://www.youtu.be/watch?v=M5QY2_8704o',
+// 'https://www.youtube.com/watch?v=M5QY2_8704o'
 ```
-It returns the Video ID, or `false` if it cannot find any.
+It returns the **Video ID**, or `false` if it cannot find any.
 
-## ToDo
-I will try to export more information from the returned data. Like video title, description, length, thumbnails, etc.
+### getVideoDetails()
+You will need to:
+1. Provide your own [Google API Key](https://support.google.com/googleapi/answer/6158862) with [YouTube Data API v3](https://support.google.com/googleapi/answer/6158841?hl=en&ref_topic=7013279) enabled
+2. And place it as a `property` in your project’s `tiapp.xml` file:
+
+```xml
+<property name="googleApiKey" type="string">PLACE-YOUR-GOOGLE-API-KEY</property>
+```
+
+Once you’ve added your `Google API Key`, you can use it like this:
+
+
+```javascript
+const tiYoutube = require('ti.youtube');
+
+let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
+
+if (videoID) {
+    tiYoutube.getVideoDetails(videoID, videoDetails => {
+        // videoDetails will contain some or all of the following data:
+
+        // publishedAt
+        // channelId
+        // title
+        // description
+        // thumbnails ( various sizes )
+        // channelTitle
+        // tags
+        // categoryId
+        // liveBroadcastContent
+        // defaultLanguage
+        // localized ( title and description )
+        // defaultAudioLanguage
+
+        // You can for example assigned it to a Collection:
+        Alloy.Globals.mocx.createCollection('videoDetails', [videoDetails]);
+
+        // Or you can put it directly into elements:
+        $.videoTitle = videoDetails.title;
+        $.videoDescription = videoDetails.description;
+    });
+}
+```
+
+> **[Here's an example of the returned data](https://github.com/macCesar/ti.youtube/blob/master/videoDetails.md)**
+
+### setApiKey()
+Useful if you don’t want to set your `Google API key` in your `tiapp.xml` file, or if you get it from a database call, or if for some reason you need to change it at runtime.
+
+```javascript
+const tiYoutube = require('ti.youtube');
+
+tiYoutube.setApiKey('YOUR-NEW-OR-UPDATED-GOOGLE-API-KEY');
+```
+
+### getApiKey()
+To view your Google API Key
+
+```javascript
+const tiYoutube = require('ti.youtube');
+
+console.log(tiYoutube.getApiKey());
+// output: YOUR-GOOGLE-API-KEY
+```
 
 ## Useful information
 ### Getting video metadata
