@@ -16,7 +16,7 @@ When available, `ti.youtube` will use HLS manifest file to play adaptive media f
 
 ## Warning and Restrictions
 ### Legal notice
-`ti.youtube` may brake YouTube [Terms of Service](https://www.youtube.com/t/terms). The only *official* way of playing a YouTube video inside an app is with a `WebView` and the [iframe player API](https://developers.google.com/youtube/iframe_api_reference).
+`ti.youtube` may brake YouTube’s [Terms of Service](https://www.youtube.com/t/terms). The only *official* way of playing a YouTube video inside an app is with a `WebView` and the [iframe player API](https://developers.google.com/youtube/iframe_api_reference).
 
 It is up to you to give proper credit to YouTube, their services, and to the owner's video sources.
 
