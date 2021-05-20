@@ -3,7 +3,7 @@ let googleApiKey = Ti.App.Properties.getString('googleApiKey');
 function getUrlByVideoId(videoID, callback, errorCallback) {
 	if (videoID) {
 		const xhr = Ti.Network.createHTTPClient({
-			onload: function () {
+			onload: function() {
 				let player_response = qsToJson(this.responseText).player_response;
 
 				if (!player_response.playabilityStatus.playableInEmbed) {
@@ -54,7 +54,7 @@ function getUrlByVideoId(videoID, callback, errorCallback) {
 				noValidUrls(errorCallback);
 			},
 
-			onerror: function (e) {
+			onerror: function(e) {
 				Ti.API.info('error, HTTP status = ' + this.status);
 				if (errorCallback) {
 					errorCallback({ error: "http_error", result: e });
@@ -66,7 +66,7 @@ function getUrlByVideoId(videoID, callback, errorCallback) {
 			timeout: 5000
 		});
 
-		xhr.open("GET", `https://www.youtube.com/get_video_info?video_id=${videoID}`);
+		xhr.open("GET", `https://www.youtube.com/get_video_info?video_id=${videoID}&html5=1`);
 
 		xhr.send();
 	} else {
@@ -88,7 +88,7 @@ function noValidUrls(errorCallback) {
 }
 
 function getVideoIdFromUrl(urlStream) {
-	// https://stackoverflow.com/a/53142593/5791020
+	// https://stackoverflow.com/a/53142593/5791020 & https://regex101.com/r/l0m7yh/1
 	let regExp = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)(\/)?(watch\?v=|\?v=)?(.*)$/;
 
 	let match = urlStream.match(regExp);
@@ -122,10 +122,10 @@ module.exports.getVideoDetails = (videoID, callback, errorCallback) => {
 			send({
 				method: 'GET',
 				url: `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${googleApiKey}`,
-				success: function (res) {
+				success: function(res) {
 					callback(res.items[0].snippet);
 				},
-				error: function (err) {
+				error: function(err) {
 					if (errorCallback) {
 						errorCallback({ error: err });
 					} else {
@@ -149,18 +149,18 @@ module.exports.getVideoDetails = (videoID, callback, errorCallback) => {
 	}
 }
 
-module.exports.setApiKey = function (_googleApiKey) {
+module.exports.setApiKey = function(_googleApiKey) {
 	googleApiKey = _googleApiKey;
 }
 
-module.exports.getApiKey = function () {
+module.exports.getApiKey = function() {
 	return googleApiKey;
 }
 
 function send(args) {
 	const request = Ti.Network.createHTTPClient();
 
-	request.onload = function () {
+	request.onload = function() {
 		let response;
 
 		try {
@@ -173,7 +173,7 @@ function send(args) {
 		}
 	};
 
-	request.onerror = function (e) {
+	request.onerror = function(e) {
 		Ti.API.warn('HTTP error for: ' + args.url);
 
 		let status = this.status;
