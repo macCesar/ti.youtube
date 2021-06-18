@@ -1,72 +1,182 @@
 let googleApiKey = Ti.App.Properties.getString('googleApiKey');
+const INNERTUBE_API_KEY = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8";
+let videoId;
+let url;
+let videoDetails = {};
 
-function getUrlByVideoId(videoID, callback, errorCallback) {
-	if (videoID) {
-		const xhr = Ti.Network.createHTTPClient({
-			onload: function() {
-				let player_response = qsToJson(this.responseText).player_response;
+module.exports.init = function(urlStream, callback, errorCallback) {
+	videoId = getVideoIdFromUrl(urlStream);
 
-				if (!player_response.playabilityStatus.playableInEmbed) {
-					if (errorCallback) {
-						errorCallback({ error: "video_not_allowed" });
-					} else {
-						alert('This video cannot be played natively!');
-					}
-					return;
-				}
+	if (videoId) {
+		const xhr = Ti.Network.createHTTPClient();
 
-				if (!player_response.streamingData) {
-					noValidUrls(errorCallback);
-					return;
-				}
+		let ytURL = `https://www.youtube.com/watch?v=${videoId}&pbj=1&key=${INNERTUBE_API_KEY}`;
 
-				let urls = {};
-				let formats = player_response.streamingData.formats;
-				let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
+		xhr.clearCookies(ytURL);
 
-				if (hlsManifestUrl) {
-					urls.medium = urls.high = urls.best = hlsManifestUrl;
-					callback(urls);
-					return;
-				}
+		xhr.onload = function() {
+			let responseText = JSON.parse(this.responseText);
 
-				if (formats) {
-					// formats[0] typically contains 360p video ( medium quality )
-					if (formats[0] && formats[0].url) {
-						urls.medium = formats[0].url;
-					}
+			let player_response = responseText[2].playerResponse;
 
-					// formats[1] typically contains 720p video ( hd720 quality )
-					if (formats[1] && formats[1].url) {
-						urls.high = formats[1].url;
-					}
-
-					if (urls.high || urls.medium) {
-						urls.best = (urls.high) ? urls.high : urls.medium;
-					}
-
-					if (!_.isEmpty(urls)) {
-						callback(urls);
-						return;
-					}
-				}
-
-				noValidUrls(errorCallback);
-			},
-
-			onerror: function(e) {
-				Ti.API.info('error, HTTP status = ' + this.status);
+			// Playable In Embed
+			if (!player_response.playabilityStatus.playableInEmbed) {
 				if (errorCallback) {
-					errorCallback({ error: "http_error", result: e });
+					errorCallback({ error: "video_not_allowed" });
 				} else {
-					alert(e.error);
+					alert('This video cannot be played natively!');
 				}
-			},
+				return;
+			}
 
-			timeout: 5000
-		});
+			// Check if it does not contain any streaming Data
+			if (!player_response.streamingData) {
+				noValidUrls(errorCallback);
+				return;
+			}
 
-		xhr.open("GET", `https://www.youtube.com/get_video_info?video_id=${videoID}&html5=1`);
+			let formats = player_response.streamingData.formats;
+			let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
+
+			// URLs
+			let urls = {};
+			if (hlsManifestUrl) {
+
+				alert('hlsManifestUrl');
+				urls.medium = urls.high = urls.best = hlsManifestUrl;
+			}
+
+			if (formats) {
+				// formats[0] typically contains 720p video ( hd720 quality )
+				if (formats[0]) {
+					urls.high = formats[0].url;
+				}
+
+				// formats[1] typically contains 360p video ( medium quality )
+				if (formats[1]) {
+					urls.medium = formats[1].url;
+				}
+
+				// formats[2] typically contains 180p video ( small quality )
+				if (formats[2]) {
+					urls.small = formats[2].url;
+				}
+
+				urls.best = (formats[0]) ? formats[0].url : (formats[1]) ? formats[1].url : (formats[2]) ? formats[2].url : '';
+			}
+
+			// Video Info
+			videoDetails = processDetails(urls, player_response.videoDetails);
+
+			if (callback) {
+				callback(videoDetails);
+			}
+		};
+
+		xhr.onerror = function(e) {
+			Ti.API.info('error, HTTP status = ' + this.status);
+			if (errorCallback) {
+				errorCallback({ error: "http_error", result: e });
+			} else {
+				alert(e.error);
+			}
+		};
+
+		console.warn('ytURL:', ytURL);
+		xhr.open("POST", ytURL);
+
+		// xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+		// xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15');
+
+		xhr.send();
+	} else {
+		if (errorCallback) {
+			errorCallback({ error: "no_video_id" });
+		} else {
+			alert('No Video ID provided!');
+		}
+	}
+}
+
+function getUrlByVideoId(videoId, callback, errorCallback) {
+	if (videoId) {
+		const xhr = Ti.Network.createHTTPClient();
+
+		let ytURL = `https://www.youtube.com/watch?v=${videoId}&pbj=1&key=${INNERTUBE_API_KEY}`;
+
+		xhr.clearCookies(ytURL);
+
+		xhr.onload = function() {
+			let responseText = JSON.parse(this.responseText);
+
+			let player_response = responseText[2].playerResponse;
+
+			// Playable In Embed
+			if (!player_response.playabilityStatus.playableInEmbed) {
+				if (errorCallback) {
+					errorCallback({ error: "video_not_allowed" });
+				} else {
+					alert('This video cannot be played natively!');
+				}
+				return;
+			}
+
+			// Check if it does not contain any streaming Data
+			if (!player_response.streamingData) {
+				noValidUrls(errorCallback);
+				return;
+			}
+
+			let formats = player_response.streamingData.formats;
+			let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
+
+			// URLs
+			let urls = {};
+			if (hlsManifestUrl) {
+				urls.medium = urls.high = urls.best = hlsManifestUrl;
+			}
+
+			if (formats) {
+				// formats[0] typically contains 720p video ( hd720 quality )
+				if (formats[0]) {
+					urls.high = formats[0].url;
+				}
+
+				// formats[1] typically contains 360p video ( medium quality )
+				if (formats[1]) {
+					urls.medium = formats[1].url;
+				}
+
+				// formats[2] typically contains 180p video ( small quality )
+				if (formats[2]) {
+					urls.small = formats[2].url;
+				}
+
+				urls.best = (formats[0]) ? formats[0].url : (formats[1]) ? formats[1].url : (formats[2]) ? formats[2].url : '';
+			}
+
+			// Video Info
+			videoDetails = processDetails(urls, player_response.videoDetails);
+
+			if (callback) {
+				callback(urls);
+			}
+		};
+
+		xhr.onerror = function(e) {
+			Ti.API.info('error, HTTP status = ' + this.status);
+			if (errorCallback) {
+				errorCallback({ error: "http_error", result: e });
+			} else {
+				alert(e.error);
+			}
+		};
+
+		console.warn('ytURL:', ytURL);
+		xhr.open("POST", ytURL);
+
+		// xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+		// xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15');
 
 		xhr.send();
 	} else {
@@ -116,38 +226,10 @@ function qsToJson(qs) {
 	return res;
 }
 
-module.exports.getVideoDetails = (videoID, callback, errorCallback) => {
-	if (googleApiKey) {
-		if (videoID) {
-			send({
-				method: 'GET',
-				url: `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${googleApiKey}`,
-				success: function(res) {
-					callback(res.items[0].snippet);
-				},
-				error: function(err) {
-					if (errorCallback) {
-						errorCallback({ error: err });
-					} else {
-						alert(err);
-					}
-				}
-			});
-		} else {
-			if (errorCallback) {
-				errorCallback({ error: "no_video_id" });
-			} else {
-				alert('No Video ID provided!');
-			}
-		}
-	} else {
-		if (errorCallback) {
-			errorCallback({ error: "no_api_key" });
-		} else {
-			alert('No Google API Key provided!');
-		}
-	}
+function getVideoDetails() {
+	return videoDetails;
 }
+module.exports.getVideoDetails = getVideoDetails;
 
 module.exports.setApiKey = function(_googleApiKey) {
 	googleApiKey = _googleApiKey;
@@ -204,4 +286,18 @@ function send(args) {
 	} else {
 		request.send();
 	}
+}
+
+function processDetails(_urls, _videoDetails) {
+	return {
+		url: _urls,
+		videoId: _videoDetails.videoId,
+		channelId: _videoDetails.channelId,
+		viewCount: _videoDetails.viewCount,
+		isLiveContent: _videoDetails.isLiveContent,
+		title: _videoDetails.title.replace(/\+/g, ' '),
+		author: _videoDetails.author.replace(/\+/g, ' '),
+		thumbnail: { xs: _videoDetails.thumbnail.thumbnails[0], sm: _videoDetails.thumbnail.thumbnails[1], md: _videoDetails.thumbnail.thumbnails[2], lg: _videoDetails.thumbnail.thumbnails[3], xl: _videoDetails.thumbnail.thumbnails[4] },
+		shortDescription: _videoDetails.shortDescription.replace(/\+/g, ' '),
+	};
 }

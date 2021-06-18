@@ -6,11 +6,14 @@ It returns an URL object with the following properties:
 
 ```javascript
 {
+    small: 'typically 180p',
     medium: 'typically 360p',
     high: 'typically 720p',
-    best: 'best quality available either medium or high'
+    best: 'best quality available either small, medium or high'
 }
 ```
+
+## NOTE: The current solution doesn't load Live Streaming Data
 ### Live Streaming Media
 When available, `ti.youtube` will use HLS manifest file to play adaptive media from live streaming URLs.
 
@@ -36,6 +39,7 @@ npm i ti.youtube
 If you don't use `npm`, you can download the [latest version](https://github.com/macCesar/ti.youtube/blob/master/ti.youtube.js) and place it in your `lib` folder (or Resources for classic project).
 
 ## Using it
+### I'm keeping this method for compatibilty reasons.
 > index.js
 ```javascript
 const tiYoutube = require('ti.youtube');
@@ -45,6 +49,7 @@ let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
 if (videoID) {
     tiYoutube.getUrlByVideoId(videoID, url => {
         // Available Video Qualities:
+        // small ( typically 180p )
         // medium ( typically 360p )
         // high ( typically 720p )
         // best ( best quality available either medium or high )
@@ -56,6 +61,67 @@ if (videoID) {
 }
 
 $.window.open();
+```
+
+
+## A better option: `init`
+### With this method you will get the Video Details along with the direct URLs in one call
+
+> index.js
+```javascript
+const tiYoutube = require('ti.youtube');
+
+tiYoutube.init('https://youtu.be/M5QY2_8704o', (response) => {
+    $.videoPlayer.url = response.url.best;
+});
+
+$.window.open();
+```
+
+### The response contains the following data:
+```json
+response {
+    "url": {
+        "small": "https...",
+        "medium": "https...",
+        "high": "https...",
+        "best": "https..."
+    },
+    "videoId": "M5QY2_8704o",
+    "channelId": "UCwVQIkAtyZzQSA-OY1rsGig",
+    "viewCount": "3412928",
+    "isLiveContent": false,
+    "title": "Chillstep Music for Programming / Cyber / Coding",
+    "author": "Music Lab",
+    "thumbnail": {
+        "xs": {
+            "url": "https://i.ytimg.com/vi/M5QY2_8704o/default.jpg",
+            "width": 120,
+            "height": 90
+        },
+        "sm": {
+            "url": "https://i.ytimg.com/vi/M5QY2_8704o/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+        },
+        "md": {
+            "url": "https://i.ytimg.com/vi/M5QY2_8704o/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+        },
+        "lg": {
+            "url": "https://i.ytimg.com/vi/M5QY2_8704o/sddefault.jpg",
+            "width": 640,
+            "height": 480
+        },
+        "xl": {
+            "url": "https://i.ytimg.com/vi/M5QY2_8704o/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBne48YMp_VLuCJtrje7oK_xI--4A",
+            "width": 686,
+            "height": 386
+        }
+    },
+    "shortDescription": "___THE VIDEO DESCRIPTION___"
+}
 ```
 
 > index.xml
