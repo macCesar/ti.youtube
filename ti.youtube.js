@@ -41,8 +41,6 @@ module.exports.init = function(urlStream, callback, errorCallback) {
 			// URLs
 			let urls = {};
 			if (hlsManifestUrl) {
-
-				alert('hlsManifestUrl');
 				urls.medium = urls.high = urls.best = hlsManifestUrl;
 			}
 
