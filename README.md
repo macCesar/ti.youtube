@@ -51,7 +51,7 @@ if (videoID) {
         // small ( typically 180p )
         // medium ( typically 360p )
         // high ( typically 720p )
-        // best ( best quality available from small, medium or high data )
+        // best ( best quality available from small, medium or high sizes )
         $.videoPlayer.url = url.best;
     }, e => {
         // optional callback in case of an error
@@ -81,50 +81,56 @@ $.window.open();
 ```json
 response {
     "url": {
-        "small": "https...",
-        "medium": "https...",
-        "high": "https...",
-        "best": "https..."
+        // Any available size
+        "small": "--DIRECT-VIDEO-LINK--",
+        "medium": "--DIRECT-VIDEO-LINK--",
+        "high": "--DIRECT-VIDEO-LINK--",
+        // Best quality available from small, medium or high sizes
+        "best": "--DIRECT-VIDEO-LINK--"
     },
     "videoId": "M5QY2_8704o",
+    "keywords": [
+        "--ARRAY-OF-KEYWORDS--"
+    ],
     "channelId": "UCwVQIkAtyZzQSA-OY1rsGig",
-    "viewCount": "3412928",
+    "viewCount": "3469185",
     "isLiveContent": false,
+    "averageRating": 4.8945122,
     "title": "Chillstep Music for Programming / Cyber / Coding",
     "author": "Music Lab",
     "thumbnail": {
         "xs": {
-            "url": "https://i.ytimg.com/vi/M5QY2_8704o/default.jpg",
+            "url": "--URL-TO-IMAGE--",
             "width": 120,
             "height": 90
         },
         "sm": {
-            "url": "https://i.ytimg.com/vi/M5QY2_8704o/mqdefault.jpg",
+            "url": "--URL-TO-IMAGE--",
             "width": 320,
             "height": 180
         },
         "md": {
-            "url": "https://i.ytimg.com/vi/M5QY2_8704o/hqdefault.jpg",
+            "url": "--URL-TO-IMAGE--",
             "width": 480,
             "height": 360
         },
         "lg": {
-            "url": "https://i.ytimg.com/vi/M5QY2_8704o/sddefault.jpg",
+            "url": "--URL-TO-IMAGE--",
             "width": 640,
             "height": 480
         },
         "xl": {
-            "url": "https://i.ytimg.com/vi/M5QY2_8704o/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBne48YMp_VLuCJtrje7oK_xI--4A",
+            "url": "--URL-TO-IMAGE--",
             "width": 686,
             "height": 386
         },
         "best": {
-            "url": "best quality available from xs, sm, md, lg or xl data",
-            "width": 'XXX',
-            "height": 'XXX'
+            "url": "--BEST-AVAILABLE-RESOLUTION--",
+            "width": 686,
+            "height": 386
         }
     },
-    "shortDescription": "___THE VIDEO DESCRIPTION___"
+    "shortDescription": "--VIDEO-DESCRIPTION--"
 }
 ```
 

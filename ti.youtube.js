@@ -137,9 +137,11 @@ function processVideoDetails(_urls, _videoDetails) {
 	return {
 		url: _urls,
 		videoId: _videoDetails.videoId,
+		keywords: _videoDetails.keywords,
 		channelId: _videoDetails.channelId,
 		viewCount: _videoDetails.viewCount,
 		isLiveContent: _videoDetails.isLiveContent,
+		averageRating: _videoDetails.averageRating,
 		title: _videoDetails.title.replace(/\+/g, ' '),
 		author: _videoDetails.author.replace(/\+/g, ' '),
 		thumbnail: { xs: _videoDetails.thumbnail.thumbnails[0], sm: _videoDetails.thumbnail.thumbnails[1], md: _videoDetails.thumbnail.thumbnails[2], lg: _videoDetails.thumbnail.thumbnails[3], xl: _videoDetails.thumbnail.thumbnails[4], best: bestImage },
