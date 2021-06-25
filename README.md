@@ -51,7 +51,7 @@ if (videoID) {
         // small ( typically 180p )
         // medium ( typically 360p )
         // high ( typically 720p )
-        // best ( best quality available either medium or high )
+        // best ( best quality available from small, medium or high data )
         $.videoPlayer.url = url.best;
     }, e => {
         // optional callback in case of an error
@@ -117,6 +117,11 @@ response {
             "url": "https://i.ytimg.com/vi/M5QY2_8704o/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBne48YMp_VLuCJtrje7oK_xI--4A",
             "width": 686,
             "height": 386
+        },
+        "best": {
+            "url": "best quality available from xs, sm, md, lg or xl data",
+            "width": 'XXX',
+            "height": 'XXX'
         }
     },
     "shortDescription": "___THE VIDEO DESCRIPTION___"
