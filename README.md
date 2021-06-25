@@ -13,9 +13,8 @@ It returns an URL object with the following properties:
 }
 ```
 
-## NOTE: The current solution doesn't load Live Streaming Data
-### Live Streaming Media
-When available, `ti.youtube` will use HLS manifest file to play adaptive media from live streaming URLs.
+## NOTE: The current solution only loads data from certain types of videos
+The data received from YouTube is a big pile of mess, different type of video (live video, normal video, member-only video, unlisted video, .etc) can have a different response schema, so at the moment finding the right path is difficult.
 
 ## Warning and Restrictions
 ### Legal notice
@@ -181,50 +180,18 @@ tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
 It returns the **Video ID**, or `false` if it cannot find any.
 
 ### getVideoDetails()
-You will need to:
-1. Provide your own [Google API Key](https://support.google.com/googleapi/answer/6158862) with [YouTube Data API v3](https://support.google.com/googleapi/answer/6158841?hl=en&ref_topic=7013279) enabled
-2. And place it as a `property` in your project’s `tiapp.xml` file:
+When you call `init` or `getUrlByVideoId` the data returned it's also store in a local variable inside of the module, you can retreive it at any moment by calling getVideoDetails() helper function.
 
+> **[Here's an example of the returned data](https://github.com/macCesar/ti.youtube/blob/master/videoDetails.md)**
+
+### Google API Key
+`ti.youtube` uses a publicly available `INNERTUBE_API_KEY`. But if you want to, you can provide your own [Google API Key](https://support.google.com/googleapi/answer/6158862) with [YouTube Data API v3](https://support.google.com/googleapi/answer/6158841?hl=en&ref_topic=7013279) enabled.
+
+### Setting your own Google API Key globally
+You can place it as a property in your project’s `tiapp.xml` file:
 ```xml
 <property name="googleApiKey" type="string">PLACE-YOUR-GOOGLE-API-KEY</property>
 ```
-
-Once you’ve added your `Google API Key`, you can use it like this:
-
-
-```javascript
-const tiYoutube = require('ti.youtube');
-
-let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
-
-if (videoID) {
-    tiYoutube.getVideoDetails(videoID, videoDetails => {
-        // videoDetails will contain some or all of the following data:
-
-        // publishedAt
-        // channelId
-        // title
-        // description
-        // thumbnails ( various sizes )
-        // channelTitle
-        // tags
-        // categoryId
-        // liveBroadcastContent
-        // defaultLanguage
-        // localized ( title and description )
-        // defaultAudioLanguage
-
-        // You can for example assigned it to a Collection:
-        Alloy.Globals.mocx.createCollection('videoDetails', [videoDetails]);
-
-        // Or you can put it directly into elements:
-        $.videoTitle.text = videoDetails.title;
-        $.videoDescription.text = videoDetails.description;
-    });
-}
-```
-
-> **[Here's an example of the returned data](https://github.com/macCesar/ti.youtube/blob/master/videoDetails.md)**
 
 ### setApiKey()
 Useful if you don’t want to set your `Google API key` in your `tiapp.xml` file, or if you get it from a database call, or if for some reason you need to change it at runtime.
