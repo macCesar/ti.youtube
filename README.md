@@ -6,10 +6,10 @@ It returns an URL object with the following properties:
 
 ```javascript
 {
-    small: 'typically 180p',
-    medium: 'typically 360p',
-    high: 'typically 720p',
-    best: 'best quality available either small, medium or high'
+  small: 'typically 180p',
+  medium: 'typically 360p',
+  high: 'typically 720p',
+  best: 'best quality available either small, medium or high'
 }
 ```
 
@@ -46,22 +46,21 @@ const tiYoutube = require('ti.youtube');
 let videoID = tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
 
 if (videoID) {
-    tiYoutube.getUrlByVideoId(videoID, url => {
-        // Available Video Qualities:
-        // small ( typically 180p )
-        // medium ( typically 360p )
-        // high ( typically 720p )
-        // best ( best quality available from small, medium or high sizes )
-        $.videoPlayer.url = url.best;
-    }, e => {
-        // optional callback in case of an error
-        // can return e.error statuses ["no_valid_urls", "video_not_allowed", "http_error"]
-    });
+  tiYoutube.getUrlByVideoId(videoID, response => {
+    // Available Video Qualities:
+    // small ( typically 180p )
+    // medium ( typically 360p )
+    // high ( typically 720p )
+    // best ( best quality available from small, medium or high sizes )
+    $.videoPlayer.url = response.url.best;
+  }, e => {
+    // optional callback in case of an error
+    // can return e.error statuses ["no_valid_urls", "video_not_allowed", "http_error"]
+  });
 }
 
 $.window.open();
 ```
-
 
 ## A better option: `init`
 ### With this method you will get the Video Details along with the direct URLs in one call
@@ -80,95 +79,95 @@ $.window.open();
 ### The response contains the following data:
 ```json
 response {
-    "url": {
-        // Any available size
-        "small": "--DIRECT-VIDEO-LINK--",
-        "medium": "--DIRECT-VIDEO-LINK--",
-        "high": "--DIRECT-VIDEO-LINK--",
-        // Best quality available from small, medium or high sizes
-        "best": "--DIRECT-VIDEO-LINK--"
+  "url": {
+    // Any available size
+    "small": "--DIRECT-VIDEO-LINK--",
+    "medium": "--DIRECT-VIDEO-LINK--",
+    "high": "--DIRECT-VIDEO-LINK--",
+    // Best quality available from small, medium or high sizes
+    "best": "--DIRECT-VIDEO-LINK--"
+  },
+  "videoId": "M5QY2_8704o",
+  "keywords": [
+    "--ARRAY-OF-KEYWORDS--"
+  ],
+  "channelId": "UCwVQIkAtyZzQSA-OY1rsGig",
+  "viewCount": "3469185",
+  "isLiveContent": false,
+  "averageRating": 4.8945122,
+  "title": "Chillstep Music for Programming / Cyber / Coding",
+  "author": "Music Lab",
+  "thumbnail": {
+    "xs": {
+      "url": "--URL-TO-IMAGE--",
+      "width": 120,
+      "height": 90
     },
-    "videoId": "M5QY2_8704o",
-    "keywords": [
-        "--ARRAY-OF-KEYWORDS--"
-    ],
-    "channelId": "UCwVQIkAtyZzQSA-OY1rsGig",
-    "viewCount": "3469185",
-    "isLiveContent": false,
-    "averageRating": 4.8945122,
-    "title": "Chillstep Music for Programming / Cyber / Coding",
-    "author": "Music Lab",
-    "thumbnail": {
-        "xs": {
-            "url": "--URL-TO-IMAGE--",
-            "width": 120,
-            "height": 90
-        },
-        "sm": {
-            "url": "--URL-TO-IMAGE--",
-            "width": 320,
-            "height": 180
-        },
-        "md": {
-            "url": "--URL-TO-IMAGE--",
-            "width": 480,
-            "height": 360
-        },
-        "lg": {
-            "url": "--URL-TO-IMAGE--",
-            "width": 640,
-            "height": 480
-        },
-        "xl": {
-            "url": "--URL-TO-IMAGE--",
-            "width": 686,
-            "height": 386
-        },
-        "best": {
-            "url": "--BEST-AVAILABLE-RESOLUTION--",
-            "width": 686,
-            "height": 386
-        }
+    "sm": {
+      "url": "--URL-TO-IMAGE--",
+      "width": 320,
+      "height": 180
     },
-    "shortDescription": "--VIDEO-DESCRIPTION--"
+    "md": {
+      "url": "--URL-TO-IMAGE--",
+      "width": 480,
+      "height": 360
+    },
+    "lg": {
+      "url": "--URL-TO-IMAGE--",
+      "width": 640,
+      "height": 480
+    },
+    "xl": {
+      "url": "--URL-TO-IMAGE--",
+      "width": 686,
+      "height": 386
+    },
+    "best": {
+      "url": "--BEST-AVAILABLE-RESOLUTION--",
+      "width": 686,
+      "height": 386
+    }
+  },
+  "shortDescription": "--VIDEO-DESCRIPTION--"
 }
 ```
 
 > index.xml
 ```xml
 <Alloy>
-    <Window id="window">
-        <VideoPlayer id="videoPlayer" ns="Ti.Media" />
-    </Window>
+  <Window id="window">
+    <VideoPlayer id="videoPlayer" ns="Ti.Media" />
+  </Window>
 </Alloy>
 ```
 
 > app.tss
 ```css
 "#window": {
-    backgroundColor: '#ffffff'
+  backgroundColor: '#ffffff'
 }
 
-"#videoPlayer" : {
-    autoplay: true,
-    width: Ti.UI.FILL,
-    height: Ti.UI.FILL,
-    showsControls: true
+'#videoPlayer' : {
+  autoplay: true,
+  width: Ti.UI.FILL,
+  height: Ti.UI.FILL,
+  showsControls: true,
+  scalingMode : Ti.Media.VIDEO_SCALING_ASPECT_FIT
 }
 
-"#videoPlayer[platform=ios]" : {
-    allowsAirPlay: true,
-    backgroundColor: 'transparent',
-    mediaTypes: [ Ti.Media.VIDEO_MEDIA_TYPE_VIDEO ]
+'#videoPlayer[platform=ios]' : {
+  allowsAirPlay: true,
+  mediaTypes: [ Ti.Media.VIDEO_MEDIA_TYPE_VIDEO ]
 }
 
-"#videoPlayer[platform=android]" : {
-    keepScreenOn: true,
-    backgroundColor: '#000000'
+'#videoPlayer[platform=android]' : {
+  keepScreenOn: true
 }
 ```
 
 ## Helper Functions
+
 ### getVideoIdFromUrl()
 To get the `video ID` from any of the supported URL formats.
 ```javascript
@@ -191,14 +190,14 @@ tiYoutube.getVideoIdFromUrl('https://youtu.be/M5QY2_8704o');
 It returns the **Video ID**, or `false` if it cannot find any.
 
 ### getVideoDetails()
-When you call `init` or `getUrlByVideoId` the data returned it's also store in a local variable inside of the module, you can retreive it at any moment by calling getVideoDetails() helper function.
+When you call `init` or `getUrlByVideoId` the data returned it's also store in a local variable inside the module, you can retreive it at any time by calling the `getVideoDetails()` helper function.
 
 > **[Here's an example of the returned data](https://github.com/macCesar/ti.youtube/blob/master/videoDetails.md)**
 
 ### Google API Key
 `ti.youtube` uses a publicly available `INNERTUBE_API_KEY`. But if you want to, you can provide your own [Google API Key](https://support.google.com/googleapi/answer/6158862) with [YouTube Data API v3](https://support.google.com/googleapi/answer/6158841?hl=en&ref_topic=7013279) enabled.
 
-### Setting your own Google API Key globally
+### Setting your own Google API Key
 You can place it as a property in your project’s `tiapp.xml` file:
 ```xml
 <property name="googleApiKey" type="string">PLACE-YOUR-GOOGLE-API-KEY</property>
