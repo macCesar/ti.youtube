@@ -43,14 +43,16 @@ function makeTheCall(videoId, callback, errorCallback) {
 
 		let defaultGoogleApiKey = (googleApiKey) ? googleApiKey : INNERTUBE_API_KEY;
 
-		let ytURL = `https://m.youtube.com/watch?v=${videoId}&pbj=1&key=${defaultGoogleApiKey}`;
+		// let ytURL = `https://m.youtube.com/watch?v=${videoId}&pbj=1&key=${defaultGoogleApiKey}`;
+		let ytURL = `https://yt2html5.com/?id=${videoId}`;
 
 		// xhr.clearCookies(ytURL);
 
 		xhr.onload = function() {
 			let responseText = JSON.parse(this.responseText);
 
-			let player_response = responseText[2].playerResponse;
+			// let player_response = responseText[2].playerResponse;
+			let player_response = responseText.data.player_response;
 
 			// Playable In Embed
 			if (!player_response.playabilityStatus.playableInEmbed) {
@@ -107,7 +109,8 @@ function makeTheCall(videoId, callback, errorCallback) {
 			}
 		};
 
-		xhr.open("POST", ytURL);
+		// xhr.open("POST", ytURL);
+		xhr.open("GET", ytURL);
 
 		xhr.setRequestHeader('Accept-Encoding', 'gzip');
 		xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
