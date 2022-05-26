@@ -51,52 +51,60 @@ function makeTheCall(videoId, callback, errorCallback) {
 		xhr.onload = function() {
 			let responseText = JSON.parse(this.responseText);
 
-			// let player_response = responseText[2].playerResponse;
-			let player_response = responseText.data.player_response;
+			if (responseText.success) {
+				// let player_response = responseText[2].playerResponse;
+				let player_response = responseText.data.player_response;
 
-			// Playable In Embed
-			if (!player_response.playabilityStatus.playableInEmbed) {
+				// Playable In Embed
+				if (!player_response.playabilityStatus.playableInEmbed) {
+					if (errorCallback) {
+						errorCallback({ error: "video_not_allowed" });
+					} else {
+						alert('This video cannot be played natively!');
+					}
+					return;
+				}
+
+				let formats = player_response.streamingData.formats;
+				let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
+
+				// URLs
+				let urls = {};
+				if (hlsManifestUrl) {
+					urls.medium = urls.high = urls.best = hlsManifestUrl;
+				}
+
+				if (formats) {
+					// formats[0] typically contains 720p video ( hd720 quality )
+					if (formats[0]) {
+						urls.high = formats[0].url;
+					}
+
+					// formats[1] typically contains 360p video ( medium quality )
+					if (formats[1]) {
+						urls.medium = formats[1].url;
+					}
+
+					// formats[2] typically contains 180p video ( small quality )
+					if (formats[2]) {
+						urls.small = formats[2].url;
+					}
+
+					urls.best = (formats[0]) ? formats[0].url : (formats[1]) ? formats[1].url : (formats[2]) ? formats[2].url : '';
+				}
+
+				// Video Info
+				videoDetails = processVideoDetails(urls, player_response.videoDetails);
+
+				if (callback) {
+					callback(videoDetails);
+				}
+			} else {
 				if (errorCallback) {
 					errorCallback({ error: "video_not_allowed" });
 				} else {
-					alert('This video cannot be played natively!');
+					alert(`Error getting video data\nStatus Code: ${responseText.data.statusCode}`);
 				}
-				return;
-			}
-
-			let formats = player_response.streamingData.formats;
-			let hlsManifestUrl = player_response.streamingData.hlsManifestUrl;
-
-			// URLs
-			let urls = {};
-			if (hlsManifestUrl) {
-				urls.medium = urls.high = urls.best = hlsManifestUrl;
-			}
-
-			if (formats) {
-				// formats[0] typically contains 720p video ( hd720 quality )
-				if (formats[0]) {
-					urls.high = formats[0].url;
-				}
-
-				// formats[1] typically contains 360p video ( medium quality )
-				if (formats[1]) {
-					urls.medium = formats[1].url;
-				}
-
-				// formats[2] typically contains 180p video ( small quality )
-				if (formats[2]) {
-					urls.small = formats[2].url;
-				}
-
-				urls.best = (formats[0]) ? formats[0].url : (formats[1]) ? formats[1].url : (formats[2]) ? formats[2].url : '';
-			}
-
-			// Video Info
-			videoDetails = processVideoDetails(urls, player_response.videoDetails);
-
-			if (callback) {
-				callback(videoDetails);
 			}
 		};
 
